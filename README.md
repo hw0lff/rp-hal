@@ -66,6 +66,36 @@ To get a local copy up and running follow these simple steps.
    cargo install rpXXXX-hal
    ```
 
+2. Install necessary tools 
+   a) for Arch Linux you need the following packages:
+   ```
+   pacman -S arm-none-eabi-{binutis,gcc,gdb,newlib}
+   ```
+   and b) the rustup thumbv6m-none-eabi target
+   ```
+   rustup target add thumbv6m-none-eabi
+   ```
+   and c) cargo installed tools:
+   ```
+   rustup component add llvm-tools-preview
+   cargo install uf2conv cargo-binutils
+   ```
+
+3. Compile an example
+   ```
+   cargo build --target thumbv6m-none-eabi --example=blinky --release
+   ```
+
+4. Convert it to UF2
+   ```
+   objcopy -I elf32-little target/thumbv6m-none-eabi/release/examples/blinky -O binary blinky.bin
+   uf2conv blinky.bin --base 0x10000000 --family 0xe48bff56 --output blinky.uf2
+   ```
+
+5. Copy the `blinky.uf2` file to the rp-pico board
+
+
+
 <!-- USAGE EXAMPLES -->
 ## Usage
 
